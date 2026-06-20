@@ -75,9 +75,9 @@ pub async fn about(ctx: Context<'_>) -> Result<(), Error> { // about or help
             sp::CreateEmbed::new()
                 .title("World Cup Polls")
                 .description(
-                    ".."
+                    "A bot for tracking live World Cup score predictions.\n\nWhen a match poll is posted, use the dropdown menus to lock in your score before kickoff.\n\n**Recommaneded Format**\nFor teams:\n- [Flag Team] Flag (e.g. :flag_ma: Morocco)\nFor the time:\n- YEAR/MONTH/DAY HOUR:MINUTE (e.g. 2026/6/22 14:30)"
                 )
-                .color(0x00ffac00)
+                .color(0xff0069)
         )
         .ephemeral(true),
     )

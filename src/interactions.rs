@@ -39,7 +39,7 @@ pub async fn handle_interaction(
                             sp::CreateEmbed::new()
                                 .title(component.message.embeds[0].title.clone().unwrap_or_default())
                                 .description(display)
-                                .color(0xE76F5100),
+                                .color(0xf4f800),
                         )
                         .components(vec![]),
                 ),
@@ -142,7 +142,7 @@ pub async fn handle_interaction(
                                 sp::CreateEmbed::new()
                                     .title(component.message.embeds[0].title.clone().unwrap_or_default())
                                     .description(display)
-                                    .color(0x2a9d8f00),
+                                    .color(0xff0069),
                             ),
                         ),
                     )
