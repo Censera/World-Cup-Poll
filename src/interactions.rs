@@ -10,12 +10,12 @@ pub async fn handle_interaction(
     let msg = component.message.id;
     let user = component.user.id;
 
-    let is_expired = {
+    let (is_expired, start_timestamp) = {
         let active_polls = data.active_polls.read().unwrap();
         if let Some(info) = active_polls.get(&msg) {
-            Utc::now() > info.start_time
+            (Utc::now() > info.start_time, Some(info.start_time.timestamp()))
         } else {
-            false
+            (false, None)
         }
     };
 
@@ -120,7 +120,11 @@ pub async fn handle_interaction(
                         team_b: pred.goals_for_team_b.unwrap(),
                     });
 
-                let mut display = String::from("**Predictions:**\n");
+                let mut display = String::new();
+                if let Some(ts) = start_timestamp {
+                  display.push_str(&format!("Select your score prediction\n\n**Match Starts: **<t:{}:R>\n\n", ts));
+                }
+                display.push_str("**Predictions:**\n");
                 {
                     let list = data.finalized.read().unwrap();
                     if let Some(preds) = list.get(&msg) {

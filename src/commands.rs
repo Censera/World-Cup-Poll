@@ -32,7 +32,7 @@ pub async fn score_poll(
                 sp::CreateEmbed::default()
                     .title(format!("{}", match_title))
                     .description(format!(
-                        "Select your score prediction\n\n **Match Starts:** <t:{}:R>\n\n*No predictions yet.*", // <t::R> formats the time ig
+                        "Select your score prediction\n\n**Match Starts:** <t:{}:R>\n\n*No predictions yet.*", // <t::R> formats the time ig
                         start_time.timestamp()
                     ))
                     .color(0xFF0000),
