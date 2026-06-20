@@ -1,7 +1,7 @@
+use chrono::{DateTime, Utc};
 use poise::serenity_prelude as sp;
 use std::collections::HashMap as hm;
 use std::sync::RwLock as rl;
-use chrono::{DateTime, Utc};
 
 #[derive(Clone, Default)]
 pub struct UserPrediction {
@@ -23,6 +23,7 @@ pub struct Data {
     pub drafts: rl<hm<sp::MessageId, hm<sp::UserId, UserPrediction>>>,
     pub finalized: rl<hm<sp::MessageId, Vec<FinalPrediction>>>,
     pub active_polls: rl<hm<sp::MessageId, PollInfo>>,
+    pub user_points: rl<hm<sp::UserId, u32>>,
 }
 
 pub type Error = Box<dyn std::error::Error + Send + Sync>;

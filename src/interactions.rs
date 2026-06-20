@@ -1,6 +1,6 @@
-use poise::serenity_prelude as sp;
-use chrono::Utc;
 use crate::types::{Data, Error, FinalPrediction};
+use chrono::Utc;
+use poise::serenity_prelude as sp;
 
 pub async fn handle_interaction(
     ctx: &sp::Context,
@@ -13,7 +13,10 @@ pub async fn handle_interaction(
     let (is_expired, start_timestamp) = {
         let active_polls = data.active_polls.read().unwrap();
         if let Some(info) = active_polls.get(&msg) {
-            (Utc::now() > info.start_time, Some(info.start_time.timestamp()))
+            (
+                Utc::now() > info.start_time,
+                Some(info.start_time.timestamp()),
+            )
         } else {
             (false, None)
         }
@@ -25,7 +28,10 @@ pub async fn handle_interaction(
             let list = data.finalized.read().unwrap();
             if let Some(preds) = list.get(&msg) {
                 for p in preds {
-                    display.push_str(&format!("> <@{}> : **{} - {}**\n", p.user, p.team_a, p.team_b));
+                    display.push_str(&format!(
+                        "> <@{}> : **{} - {}**\n",
+                        p.user, p.team_a, p.team_b
+                    ));
                 }
             }
         }
@@ -37,7 +43,12 @@ pub async fn handle_interaction(
                     sp::CreateInteractionResponseMessage::new()
                         .embed(
                             sp::CreateEmbed::new()
-                                .title(component.message.embeds[0].title.clone().unwrap_or_default())
+                                .title(
+                                    component.message.embeds[0]
+                                        .title
+                                        .clone()
+                                        .unwrap_or_default(),
+                                )
                                 .description(display)
                                 .color(0xf4f800),
                         )
@@ -74,12 +85,20 @@ pub async fn handle_interaction(
     match component.data.custom_id.as_str() {
         "score_team_a" => {
             let choice: u8;
-            if let sp::ComponentInteractionDataKind::StringSelect { values } = &component.data.kind {
+            if let sp::ComponentInteractionDataKind::StringSelect { values } = &component.data.kind
+            {
                 choice = values[0].parse::<u8>().unwrap_or_else(|_| {
-                  eprintln!("Failed to parse selection as u8: {}", values[0]);
-                  0
+                    eprintln!("Failed to parse selection as u8: {}", values[0]);
+                    0
                 });
-                data.drafts.write().unwrap().entry(msg).or_default().entry(user).or_default().goals_for_team_a = Some(choice);
+                data.drafts
+                    .write()
+                    .unwrap()
+                    .entry(msg)
+                    .or_default()
+                    .entry(user)
+                    .or_default()
+                    .goals_for_team_a = Some(choice);
             }
             component
                 .create_response(&ctx.http, sp::CreateInteractionResponse::Acknowledge)
@@ -87,9 +106,17 @@ pub async fn handle_interaction(
         }
         "score_team_b" => {
             let choice: u8;
-            if let sp::ComponentInteractionDataKind::StringSelect { values } = &component.data.kind {
+            if let sp::ComponentInteractionDataKind::StringSelect { values } = &component.data.kind
+            {
                 choice = values[0].parse().unwrap_or(0);
-                data.drafts.write().unwrap().entry(msg).or_default().entry(user).or_default().goals_for_team_b = Some(choice);
+                data.drafts
+                    .write()
+                    .unwrap()
+                    .entry(msg)
+                    .or_default()
+                    .entry(user)
+                    .or_default()
+                    .goals_for_team_b = Some(choice);
             }
             component
                 .create_response(&ctx.http, sp::CreateInteractionResponse::Acknowledge)
@@ -122,14 +149,20 @@ pub async fn handle_interaction(
 
                 let mut display = String::new();
                 if let Some(ts) = start_timestamp {
-                  display.push_str(&format!("Select your score prediction\n\n**Match Starts: **<t:{}:R>\n\n", ts));
+                    display.push_str(&format!(
+                        "Select your score prediction\n\n**Match Starts: **<t:{}:R>\n\n",
+                        ts
+                    ));
                 }
                 display.push_str("**Predictions:**\n");
                 {
                     let list = data.finalized.read().unwrap();
                     if let Some(preds) = list.get(&msg) {
                         for p in preds {
-                            display.push_str(&format!("> <@{}> : **{}** - **{}**\n", p.user, p.team_a, p.team_b));
+                            display.push_str(&format!(
+                                "> <@{}> : **{}** - **{}**\n",
+                                p.user, p.team_a, p.team_b
+                            ));
                         }
                     }
                 }
@@ -140,7 +173,12 @@ pub async fn handle_interaction(
                         sp::CreateInteractionResponse::UpdateMessage(
                             sp::CreateInteractionResponseMessage::new().embed(
                                 sp::CreateEmbed::new()
-                                    .title(component.message.embeds[0].title.clone().unwrap_or_default())
+                                    .title(
+                                        component.message.embeds[0]
+                                            .title
+                                            .clone()
+                                            .unwrap_or_default(),
+                                    )
                                     .description(display)
                                     .color(0xff0069),
                             ),
@@ -158,11 +196,14 @@ pub async fn handle_interaction(
                     .await?;
             } else {
                 component
-                    .create_response(&ctx.http, sp::CreateInteractionResponse::Message(
-                        sp::CreateInteractionResponseMessage::new()
-                            .content("You must select a score for both teams")
-                            .ephemeral(true),
-                    ))
+                    .create_response(
+                        &ctx.http,
+                        sp::CreateInteractionResponse::Message(
+                            sp::CreateInteractionResponseMessage::new()
+                                .content("You must select a score for both teams")
+                                .ephemeral(true),
+                        ),
+                    )
                     .await?;
             }
         }
