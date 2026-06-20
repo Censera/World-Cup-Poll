@@ -20,7 +20,7 @@ pub async fn handle_interaction(
     };
 
     if is_expired {
-        let mut display = String::from("**Predictions are Locked.\nThe match has started.**\n\n");
+        let mut display = String::from("*Predictions are Locked.\nThe match has started.*\n\n");
         {
             let list = data.finalized.read().unwrap();
             if let Some(preds) = list.get(&msg) {
@@ -39,7 +39,7 @@ pub async fn handle_interaction(
                             sp::CreateEmbed::new()
                                 .title(component.message.embeds[0].title.clone().unwrap_or_default())
                                 .description(display)
-                                .color(0xff0033),
+                                .color(0xE76F5100),
                         )
                         .components(vec![]),
                 ),
@@ -142,7 +142,7 @@ pub async fn handle_interaction(
                                 sp::CreateEmbed::new()
                                     .title(component.message.embeds[0].title.clone().unwrap_or_default())
                                     .description(display)
-                                    .color(0x00ffac00),
+                                    .color(0x2a9d8f00),
                             ),
                         ),
                     )
