@@ -1,3 +1,4 @@
+use crate::helpers::*;
 use crate::types::{Context, Error, PollInfo};
 use chrono::DateTime;
 use poise::serenity_prelude as sp;
@@ -12,6 +13,7 @@ fn goal_options() -> Vec<sp::CreateSelectMenuOption> {
         })
         .collect()
 }
+
 #[poise::command(
     slash_command,
     default_member_permissions = "MANAGE_MESSAGES | MANAGE_EVENTS"
@@ -39,7 +41,7 @@ pub async fn poll_match(
                             "Select your score prediction\n\n**Match Starts:** <t:{}:R>\n\n*No predictions yet.*", // <t::R> formats the time ig
                             start_time.timestamp()
                         ))
-                        .color(0xFF0000),
+                        .color(0xff0069),
                 )
                 .components(vec![
                     sp::CreateActionRow::SelectMenu(
@@ -76,6 +78,13 @@ pub async fn poll_match(
         .unwrap()
         .insert(msg_id, PollInfo { start_time });
 
+    log(format!(
+        "A match poll has been created: TITLE: {}, NDT: {}, ST: {}",
+        match_title, naive_datetime, start_time
+    )
+    .as_str());
+    log(format!("The Message ID is {}", msg_id).as_str());
+
     Ok(())
 }
 
@@ -89,12 +98,12 @@ pub async fn poll_about(ctx: Context<'_>) -> Result<(), Error> {
                 .description(
                     "A bot for tracking live World Cup score predictions.\n\nWhen a match poll is posted, use the dropdown menus to lock in your score before kickoff"
                 )
-                .footer(sp::CreateEmbedFooter::new("By Censera"))
+                .footer(sp::CreateEmbedFooter::new("By CNSR"))
                 .color(0xff0069)
-        )
-        .ephemeral(true),
+        ).ephemeral(true),
     )
     .await?;
+    log("The poll_about command has been used");
     Ok(())
 }
 #[poise::command(
@@ -172,16 +181,16 @@ pub async fn set_match_score(
 
     results_msg.push_str("Exact Score Winners:\n");
     if exact_winners.is_empty() {
-        results_msg.push_str("> *None* <:AHAHAHA:1517999261743054948>\n");
+        results_msg.push_str("> no one <:AHAHAHA:1517999261743054948>\n");
     } else {
-        results_msg.push_str(&format!("> {}\n", exact_winners.join(", ")));
+        results_msg.push_str(&format!("> {} +3\n", exact_winners.join(", ")));
     }
 
     results_msg.push_str("\nCorrect Outcome Winners:\n");
     if outcome_winners.is_empty() {
-        results_msg.push_str("> *None* <:AHAHAHA:1517999261743054948>\n");
+        results_msg.push_str("> no one <:AHAHAHA:1517999261743054948>\n");
     } else {
-        results_msg.push_str(&format!("> {}\n", outcome_winners.join(", ")));
+        results_msg.push_str(&format!("> {} +1\n", outcome_winners.join(", ")));
     }
 
     ctx.say(results_msg).await?;
@@ -205,6 +214,8 @@ pub async fn set_match_score(
         )
         .await;
 
+    log("The set_match_score command has been used");
+
     Ok(())
 }
 #[poise::command(
@@ -220,11 +231,14 @@ pub async fn poll_help(ctx: Context<'_>) -> Result<(), Error> {
                 .description(
                     "**Recommaneded Format**\nFor teams:\n- [Flag Team] Flag (e.g. :flag_ma: Morocco)\nFor the time:\n- YEAR/MONTH/DAY HOUR:MINUTE (e.g. 2026/6/22 14:30)"
                 )
-                .footer(sp::CreateEmbedFooter::new("Contact @Censera for any issues"))
+                // this is my account on Discord
+                .field("Host", "<@1266574427274084413>", false)
                 .color(0xff0069)
         )
         .ephemeral(true),
     )
     .await?;
+
+    log("The set_match_score command has been used");
     Ok(())
 }

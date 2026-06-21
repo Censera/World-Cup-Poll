@@ -1,7 +1,9 @@
 mod commands;
+mod helpers;
 mod interactions;
 mod types;
 
+use crate::helpers::*;
 use poise::serenity_prelude as sp;
 use std::collections::HashMap as hm;
 use std::sync::RwLock as rl;
@@ -59,12 +61,4 @@ async fn main() {
         .expect("failed to create a client");
 
     client.start().await.expect("client Error");
-}
-
-fn log(msg: &str) {
-    println!(
-        "[{}] {}",
-        chrono::Local::now().format("%Y/%m/%d %H:%M:%S"),
-        msg
-    );
 }

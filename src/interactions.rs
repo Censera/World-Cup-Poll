@@ -1,3 +1,4 @@
+use crate::helpers::*;
 use crate::types::{Data, Error, FinalPrediction};
 use chrono::Utc;
 use poise::serenity_prelude as sp;
@@ -56,6 +57,8 @@ pub async fn handle_interaction(
                 ),
             )
             .await?;
+
+        log(format!("{} tried to change a locked poll", user).as_str());
         return Ok(());
     }
 
@@ -79,6 +82,7 @@ pub async fn handle_interaction(
                 ),
             )
             .await?;
+        log(format!("{} tried to vote again", user).as_str());
         return Ok(());
     }
 
@@ -99,10 +103,12 @@ pub async fn handle_interaction(
                     .entry(user)
                     .or_default()
                     .goals_for_team_a = Some(choice);
+                log(format!("{} picked {:?} for the A team", user, choice as i8).as_str());
             }
             component
                 .create_response(&ctx.http, sp::CreateInteractionResponse::Acknowledge)
                 .await?;
+
         }
         "score_team_b" => {
             let choice: u8;
@@ -117,6 +123,7 @@ pub async fn handle_interaction(
                     .entry(user)
                     .or_default()
                     .goals_for_team_b = Some(choice);
+                    log(format!("{} picked {} for the B team", user, choice as i8).as_str());
             }
             component
                 .create_response(&ctx.http, sp::CreateInteractionResponse::Acknowledge)
@@ -194,6 +201,7 @@ pub async fn handle_interaction(
                             .ephemeral(true),
                     )
                     .await?;
+                log(format!("{} is locked in", user).as_str()); // ..
             } else {
                 component
                     .create_response(
@@ -205,6 +213,7 @@ pub async fn handle_interaction(
                         ),
                     )
                     .await?;
+                log(format!("{} didn't select a score for both teams", user).as_str());
             }
         }
         _ => {}
