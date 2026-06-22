@@ -42,13 +42,13 @@ This guide contains the exact operational workflow, command parameters, and inst
 /poll_match team_a:🇲🇦 Morocco team_b:🇫🇷 France kickoff:2026/06/25 18:00
 ```
 
-`//set_match_score`: Closes out a prediction thread, logs points, and archives the interactive card elements.
+`/set_match_score`: Closes out a prediction thread, logs points, and archives the interactive card elements.
 - Arguments
   - `message_id_str` `[String]`: Discord Message ID of the poll card.
   - `score_a` `[Integer]`: Final goals scored by Team A.
   - `score_b` `[Integer]`: Final goals scored by Team B.
 
-For the Message ID you need to enable `Developer Mode` in the settings.
+For the Message ID, you need to enable `Developer Mode` in the settings.
 
 - Example Usage
 
