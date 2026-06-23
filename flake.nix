@@ -24,6 +24,7 @@
         
         shellHook = ''
           clear
+          exec fish # This for me
         '';
       };
     };
