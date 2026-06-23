@@ -1,6 +1,6 @@
 # World Cup Polls Bot (wcp)
 
-A specialized Discord bot. The bot enables live match score predictions for football/soccer events and locks options automatically at kickoff.
+A specialized Discord bot. The bot provides live match score predictions for football/soccer events and automatically locks options at kickoff.
 
 ## Features
 
